@@ -1,0 +1,30 @@
+{
+  "name": "aws-performance-testing-starter",
+  "version": "1.0.0",
+  "description": "This is a basic starting point for conducting performance testing on AWS.",
+  "author": "Mikael Vesavuori",
+  "license": "MIT",
+  "keywords": [
+    "aws",
+    "testing",
+    "load-testing",
+    "performance-testing",
+    "aws-testing",
+    "k6"
+  ],
+  "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "test": "k6 run scripts/test.js",
+    "start": "npx sls offline --reloadHandler",
+    "start:server": "bash scripts/run.sh",
+    "build": "npx sls package",
+    "build:image": "bash scripts/build.sh",
+    "push": "bash scripts/push.sh",
+    "deploy": "npx sls deploy",
+    "teardown": "npx sls remove"
+  },
+  "devDependencies": {
+    "serverless": "3",
+    "serverless-offline": "13"
+  }
+}

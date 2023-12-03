@@ -1,0 +1,51 @@
+service: performance-test-lambda
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  architecture: arm64
+  stage: ${opt:stage, 'prod'}
+  region: ${opt:region, 'eu-north-1'}
+  memorySize: ${opt:memory, 1024}
+  ephemeralStorageSize: ${opt:storage, 512}
+  timeout: 10
+  logRetentionInDays: 1
+  versionFunctions: false
+  deploymentBucket:
+    blockPublicAccess: true
+    maxPreviousDeploymentArtifacts: 5
+    serverSideEncryption: AES256
+
+plugins:
+  - serverless-offline
+
+package:
+  individually: true
+
+custom:
+  # These are optional and only needed if using the image
+  AWS_ACCOUNT_ID: "123412341234"
+  IMAGE_NAME: "hello-world"
+
+functions:
+  PerfTest:
+    description: Performance test
+
+    # Use the dedicated code for the Lambda
+    handler: lambda/handler.handler
+
+    # Use the container image instead of the function code
+    #image: ${self:custom.AWS_ACCOUNT_ID}.dkr.ecr.${self:provider.region}.amazonaws.com/${self:custom.IMAGE_NAME}"
+
+    # Hook up the endpoints
+    events:
+
+      # API Gateway v1, "REST API" @ http://localhost:3000/<STAGE>/
+      #- http:
+      #    method: GET
+      #    path: /
+
+      # API Gateway v2, "HTTP API" @ http://localhost:3000/
+      - httpApi:
+          method: GET
+          path: /
